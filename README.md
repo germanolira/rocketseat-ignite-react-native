@@ -1,3 +1,5 @@
 # Rocketseat Ignite: React Native
 
-Testando commit
+git add.
+git commit -m "mensagem aqui"
+git push

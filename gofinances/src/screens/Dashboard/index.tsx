@@ -9,6 +9,7 @@ import {
   UserGreeting,
   UserName,
   UserWrapper,
+  Icon,
 } from './styles'
 
 export function Dashboard() {
@@ -21,11 +22,12 @@ export function Dashboard() {
             />
             <User>
               <UserGreeting>Olá, </UserGreeting>
-              <UserName>Elon Musk!!</UserName>
+              <UserName>Elon Musk</UserName>
             </User>
-
           </UserInfo>
+          <Icon name="power" />
         </UserWrapper>
+
       </Header>
     </Container>
   )

@@ -21,7 +21,7 @@ export function Dashboard() {
             />
             <User>
               <UserGreeting>Olá, </UserGreeting>
-              <UserName>Elon Musk</UserName>
+              <UserName>Elon Musk!</UserName>
             </User>
 
           </UserInfo>

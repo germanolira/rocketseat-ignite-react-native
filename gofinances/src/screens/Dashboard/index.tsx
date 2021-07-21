@@ -49,6 +49,7 @@ export function Dashboard() {
   },
   {
     id: '3',
+    type: 'negative',
     title: "Aluguel do apartamento",
     amount: "R$ 1,200.00",
     category: {

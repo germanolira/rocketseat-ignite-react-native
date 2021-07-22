@@ -42,7 +42,6 @@ export const Icon = styled(Feather)<IconProps>`
 
   color: ${({ theme, type }) =>
     type === 'up' ? theme.colors.success : theme.colors.attention};
-  };
 `;
 
 export const Title = styled.Text`

@@ -21,10 +21,15 @@ interface Props extends TouchableOpacityProps {
 export function TransactionTypeButton({
   type,
   title,
+  isActive,
   ...rest
 } : Props) {
   return (
-    <Container {...rest} isActive>
+    <Container 
+    isActive={isActive}
+    type={type}
+    {...rest}
+    >
       <Icon
       name={icons[type]}
       type={type}

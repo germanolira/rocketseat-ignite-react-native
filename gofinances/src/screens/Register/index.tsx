@@ -34,7 +34,7 @@ export function Register() {
           />
 
           <Input
-            placeholder="Preço"
+            placeholder="Preço1"
           />
           <TransactionsTypes>
             <TransactionTypeButton

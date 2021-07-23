@@ -38,6 +38,13 @@ export function Register() {
     setCategoryModalOpen(false);
   };
 
+  function handleRegister() {
+    const data = {
+      transactionType,
+      category: category.key,
+    }
+  }
+
   return (
     <Container>
       <Header>
@@ -70,7 +77,7 @@ export function Register() {
           </TransactionsTypes>
 
           <CategorySelectButton
-          title="Categoria"
+          title={category.name}
           onPress={handleOpenSelectCategoryModal}
           />
         </Fields>

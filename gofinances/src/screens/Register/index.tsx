@@ -5,7 +5,8 @@ import { Button } from '../../components/Form/Button';
 import { Input } from '../../components/Form/Input';
 import { TransactionTypeButton } from '../../components/Form/TransactionTypeButton';
 import { CategorySelectButton } from '../../components/Form/CategorySelectButton';
-import { CategorySelect } from '../CategorySelect/index'
+
+import { CategorySelect } from '../CategorySelect'
 
 import { 
   Container,
@@ -22,7 +23,7 @@ export function Register() {
   
   const [category, setCategory] = useState({
     key: 'category',
-    name: 'Categoria',
+    name: 'Categoria'
   });
 
   function handleTransactionsTypeSelect(type: 'up' | 'down') {

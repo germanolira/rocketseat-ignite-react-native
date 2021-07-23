@@ -32,6 +32,7 @@ export function CategorySelect({
   closeSelectCategory,
 } : Props) {
   return (
+
     <Container>
       <Header>
         <Title>Categoria</Title>
@@ -49,12 +50,11 @@ export function CategorySelect({
           )}
           ItemSeparatorComponent={() => <Separator />}
         />
-    
         <Footer>
-          <Button
-          title="Selecionar"
-          onPress={closeSelectCategory}
-          />
+            <Button
+            title="Selecionar"
+            onPress={closeSelectCategory}
+            />
       </Footer>
     </Container>
   );

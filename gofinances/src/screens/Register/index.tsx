@@ -129,14 +129,14 @@ export function Register() {
             </TransactionsTypes>
 
             <CategorySelectButton
-            title={category.name}
-            onPress={handleOpenSelectCategoryModal}
+              title={category.name}
+              onPress={handleOpenSelectCategoryModal}
             />
           </Fields>
 
           <Button
-          title="Enviar"
-          onPress={handleSubmit(handleRegister)}
+            title="Enviar"
+            onPress={handleSubmit(handleRegister)}
           />
         </Form>
 

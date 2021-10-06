@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { VictoryPie } from 'victory-native'
+import { VictoryPie } from 'victory-native';
+import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
 
 import { HistoryCard } from '../../components/HistoryCard/index';
 
@@ -9,8 +10,15 @@ import {
   Header,
   Title,
   Content,
+  ChartContainer,
+  MonthSelect,
+  MonthSelectButton,
+  MonthSelectIcon,
+  Month,
 } from './styles';
 import { categories } from '../../utils/categories';
+import { RFValue } from 'react-native-responsive-fontsize';
+import { useTheme } from 'styled-components';
 
 interface TransactionData {
   type: 'positive' | 'negative'
@@ -26,10 +34,13 @@ interface CategoryData {
   total: number;
   totalFormatted: string;
   color: string;
+  percent: string;
 }
 
 export function Resume() { // O nome dessa [] é Vetor
   const [totalByCategories, setTotalByCategories] = useState<CategoryData[]>([]);
+
+  const theme = useTheme();
 
   async function loadData() { // Função para carregar os dados do AsyncStorage
     const dataKey = '@gofinances:transactions'; // Chave AsyncStorage
@@ -38,6 +49,10 @@ export function Resume() { // O nome dessa [] é Vetor
 
     const expensives = responseFormatted // Separa os dados por tipo de transação
     .filter((expensive : TransactionData) => expensive.type === 'negative'); // Filtra os dados do AsyncStorage
+
+    const expensivesTotal = expensives.reduce((acumullator: number, expensive: TransactionData) => {
+      return acumullator + Number(expensive.amount); // Seleciona os dados do AsyncStorage e soma os valores
+    }, 0); // Calcula o total de gastos // Number(expensive.amount) converte o valor para number
 
     const totalByCategory: CategoryData[] = []; // Array que armazena os dados de cada categoria
 
@@ -59,12 +74,15 @@ export function Resume() { // O nome dessa [] é Vetor
           currency: 'BRL'
         }); // Converte o valor para o padrão brasileiro
 
+        const percent = `${(categorySum / expensivesTotal * 100).toFixed(0)}%` // Calcula o percentual do gasto da categoria
+
         totalByCategory.push({ // Adiciona o valor da categoria no array | em totalByCategory[]
           key: category.key,
           name: category.name,
           color: category.color,
           total: categorySum,
           totalFormatted,
+          percent
         });
       }
     });
@@ -82,13 +100,46 @@ export function Resume() { // O nome dessa [] é Vetor
           <Title>Resumo por categoria</Title>
         </Header>
 
-        <Content>
+        <Content
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={{
+            paddingHorizontal: 24,
+            paddingBottom: useBottomTabBarHeight(),
+          }}
+        >
+          <MonthSelect>
+            <MonthSelectButton>
+              <MonthSelectIcon name="chevron-left" />
+            </MonthSelectButton>
 
-          <VictoryPie
-            data={totalByCategories}
-            x="name"
-            y="total"
-          />
+            <Month>Maio</Month>
+
+            <MonthSelectButton>
+              <MonthSelectIcon name="chevron-right" />
+            </MonthSelectButton>
+          </MonthSelect>
+
+          <ChartContainer>
+            <VictoryPie
+              height={400}
+              animate={{
+                duration: 400,
+                easing: 'bounce',
+              }}
+              data={totalByCategories}
+              x="percent"
+              y="total"
+              colorScale={totalByCategories.map(category => category.color)}
+              style={{
+                labels: {
+                  fontSize: RFValue(16),
+                  fontWeight: 'bold',
+                  fill: theme.colors.primary
+                }
+              }}
+              labelRadius={170}
+            />
+          </ChartContainer>
 
         {
           totalByCategories.map(item => ( // Percorre o array de categorias

@@ -44,56 +44,57 @@ interface HighlightProps {
   lastTransaction: string;
 }
 
-export function Dashboard() {
-  const [isLoading, setIsLoading] = useState(true);
-  const [transactions, setTransactions] = useState<DataListProps[]>([]);
-  const [highlightData, setHighlightData] = useState<HighlightData>({} as HighlightData);
+export function Dashboard() { // Essa função é responsável por renderizar o Dashboard
+  const [isLoading, setIsLoading] = useState(true); // Estado que controla a animação de carregamento
+  const [transactions, setTransactions] = useState<DataListProps[]>([]); // Estado que armazena as transações
+  const [highlightData, setHighlightData] = useState<HighlightData>({} as HighlightData); // Estado que armazena os dados de destaque
 
-  const theme = useTheme();
+  const theme = useTheme(); // Estado que armazena o tema atual
 
-  function getLastTransactionDate(
-    collection: DataListProps[], 
-    type: 'positive' | 'negative'
+  function getLastTransactionDate( // Função que retorna a data da última transação
+    collection: DataListProps[], // Coleção de transações
+    type: 'positive' | 'negative' // Tipo de transação (positiva ou negativa)
     ){
 
-    const lastTransaction = new Date(
-    Math.max.apply(Math, collection
-    .filter(transaction => transaction.type === type)
-    .map(transaction => new Date(transaction.date).getTime())))
+    const lastTransaction = new Date( // Cria uma nova data com a última transação
+    Math.max.apply(Math, collection // 
+    .filter(transaction => transaction.type === type) // Filtra as transações pelo tipo de transação
+    .map(transaction => new Date(transaction.date).getTime()))) // Retorna a data da última transação
 
     return `${lastTransaction.getDate()} de ${lastTransaction.toLocaleString('pt-BR', {month: 'long'})}`;
+    // Retorna a data da última transação formatada
   }
 
-  async function loadTransactions() {
-    const dataKey = '@gofinances:transactions';
-    const response = await AsyncStorage.getItem(dataKey);
-    const transactions = response ? JSON.parse(response) : [];
+  async function loadTransactions() { // Função que carrega as transações
+    const dataKey = '@gofinances:transactions'; // Chave de armazenamento das transações
+    const response = await AsyncStorage.getItem(dataKey); // Armazena as transações
+    const transactions = response ? JSON.parse(response) : []; // Armazena as transações em formato JSON
 
-    let entriesTotal = 0;
-    let expensiveTotal = 0;
+    let entriesTotal = 0; // Variável que armazena o total de entradas
+    let expensiveTotal = 0; // Variável que armazena o total de despesas
 
-    const transactionsFormatted: DataListProps[] = transactions.
-    map((item: DataListProps) => {
+    const transactionsFormatted: DataListProps[] = transactions. // Cria uma nova coleção de transações formatadas 
+    map((item: DataListProps) => { // Faz um map para cada transação e retorna uma nova coleção
 
-      if(item.type === 'positive') {
-        entriesTotal += Number(item.amount);
-      } else {
-        expensiveTotal += Number(item.amount);
+      if(item.type === 'positive') { // Se o tipo de transação for positiva
+        entriesTotal += Number(item.amount); // Soma o valor da transação ao total de entradas
+      } else { // Se o tipo de transação for negativa
+        expensiveTotal += Number(item.amount); // Soma o valor da transação ao total de despesas
       }
 
-      const amount = Number(item.amount)
-      .toLocaleString('pt-BR', {
-        style: 'currency',
-        currency: 'BRL',
+      const amount = Number(item.amount) // Converte o valor da transação para número
+      .toLocaleString('pt-BR', { // Formata o valor da transação
+        style: 'currency', // Formata o valor da transação como moeda
+        currency: 'BRL', // Formata o valor da transação como BRL
       });
 
-      const date = Intl.DateTimeFormat('pt-BR', {
-        day: '2-digit',
-        month: '2-digit',
-        year: '2-digit'
-      }).format(new Date(item.date));
+      const date = Intl.DateTimeFormat('pt-BR', { // Formata a data da transação
+        day: '2-digit', // Formata o dia da transação com 2 dígitos
+        month: '2-digit', // Formata o mês da transação com 2 dígitos
+        year: '2-digit' // Tipo de ano
+      }).format(new Date(item.date)); // Retorna a data da transação formatada
 
-      return {
+      return { // Retorna uma nova transação formatada
         id: item.id,
         name: item.name,
         amount,
@@ -103,15 +104,16 @@ export function Dashboard() {
       }
     });
 
-    setTransactions(transactionsFormatted);
+    setTransactions(transactionsFormatted); // Seta as transações formatadas
 
-    const lastTransactionEntries = getLastTransactionDate(transactions, 'positive');
-    const lastTransactionExpensives = getLastTransactionDate(transactions, 'negative');
+    const lastTransactionEntries = getLastTransactionDate(transactions, 'positive'); // Armazena a última transação de entrada
+    const lastTransactionExpensives = getLastTransactionDate(transactions, 'negative'); // Armazena a última transação de despesa
     const totalInterval = `01 a ${lastTransactionExpensives};`
+    // Calcula o intervalo total de transações do dia 01 até a última transação de despesa
 
-    const total = entriesTotal - expensiveTotal;
+    const total = entriesTotal - expensiveTotal; // Calcula o total de transações do dia 01 até a última transação de despesa
     
-    setHighlightData({
+    setHighlightData({ // Seta os dados de destaque
       entries: {
         amount: entriesTotal.toLocaleString('pt-BR', {
           style: 'currency',
@@ -134,14 +136,14 @@ export function Dashboard() {
         lastTransaction: totalInterval
       }
     });
-    setIsLoading(false);
+    setIsLoading(false); // Seta que a animação de carregamento está finalizada
   }
 
-  useEffect(() => {
+  useEffect(() => { // Função que carrega as transações
     loadTransactions();
   }, []);
 
-  useFocusEffect(useCallback(() => {
+  useFocusEffect(useCallback(() => { // Função que carrega as transações ao entrar na tela
     loadTransactions();
   },[]));
 

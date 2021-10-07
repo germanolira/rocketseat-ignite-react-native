@@ -26,13 +26,13 @@ interface Props {
   closeSelectCategory: () => void;
 }
 
-export function CategorySelect({
-  category,
+export function CategorySelect({ // Essa função é um componente que recebe os dados da categoria ->
+  category, // selecionada e a função de fechar a tela de seleção de categoria
   setCategory,
   closeSelectCategory,
 } : Props) {
   function handleCategorySelect(category: Category) {
-    setCategory(category);
+    setCategory(category); // Essa função é chamada quando o usuário seleciona uma categoria
   }
 
   return (

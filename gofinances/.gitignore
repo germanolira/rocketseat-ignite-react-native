@@ -55,3 +55,6 @@ web-build/
 
 # CGP
 keys.ts
+
+# KEYS
+.env

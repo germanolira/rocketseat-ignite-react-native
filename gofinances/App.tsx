@@ -7,7 +7,7 @@ import 'react-native-gesture-handler';
 
 import theme from './src/global/styles/theme';
 
-import { NavigationContainer } from '@react-navigation/native';
+import { Routes } from './src/routes';
 
 import {
   useFonts,
@@ -34,15 +34,11 @@ export default function App() {
   }
 
   return (
-    <>
-      <ThemeProvider theme={theme}>
-        <NavigationContainer>
-          <StatusBar barStyle="light-content" backgroundColor="transparent" translucent />
-          <AuthProvider>
-            <SignIn />
-          </AuthProvider>
-        </NavigationContainer>
-      </ThemeProvider>
-    </>
+    <ThemeProvider theme={theme}>
+      <StatusBar barStyle="light-content" backgroundColor="transparent" translucent />
+      <AuthProvider>
+        <Routes />
+      </AuthProvider>
+    </ThemeProvider>
   );
 }
